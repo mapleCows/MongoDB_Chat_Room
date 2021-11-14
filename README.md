@@ -1,16 +1,14 @@
-# Assignment4 Concentrator
-
 ## Project Description
 <!-- you can include known bugs, design decisions, external references used... -->
-User has to refresh page to add multiple messages or create multiple rooms
+Co-Developed a social chatting network where users are able to login, create/join chat rooms backed up in a NoSQL database on MongoDB
 
 ## Ethics Questions
 
 ### Question 1
 
-> Give two possible chatroom moderation features and the reasons that you should implement each one
-1.We should be able to add a mute/timeout functionality to timeout bad users
-2.We should also add the ablity to delete old room or to automaticly delete room past a certain time frame
-3.We should add a way to delete a message that is nasty
+> Give two possible chatroom moderation features
 
 <!-- Put your answer to question 1 here -->
+1.Ability to mute/timeout users
+2.Ablity to delete old rooms or to automaticly delete rooms past a certain time frame
+3.Ability to delete a malicious messages
