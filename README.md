@@ -6,9 +6,9 @@ Co-Developed a social chatting network where users are able to login, create/joi
 
 ### Question 1
 
-> Give two possible chatroom moderation features
+> Give three possible chatroom moderation features
 
 <!-- Put your answer to question 1 here -->
-1.Ability to mute/timeout users
-2.Ablity to delete old rooms or to automaticly delete rooms past a certain time frame
-3.Ability to delete a malicious messages
+1. Ability to mute/timeout users
+2. Ablity to delete old rooms or to automaticly delete rooms past a certain time frame
+3. Ability to delete a malicious messages
