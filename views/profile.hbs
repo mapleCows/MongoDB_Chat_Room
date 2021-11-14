@@ -1,0 +1,58 @@
+<h1> Profile Pages</h1>
+<p id = "ProfileNamee" >The profile you are visiting is Billy Bob</p>
+<div>
+    <input type="text" placeholder="Username... " id="getProfileValue">
+        <button type="button" onclick="getProfileValue();"> Enter Profile you like to visit</button>
+    </input>
+</div>
+
+<div>
+<img id = "pImg" src="https://duckduckgo.com/i/6f5b2bbe.png" class="img-circle" alt="User Profile Picture"> 
+<P id = "Name">Name: </P>
+<P id = "Age">Age: </P>
+<P id = "Email">Email: </P>
+<P id = "Address">Address: </P>
+</div>
+
+
+<script>
+    function getProfileValue() {
+        
+        fetch(`http://localhost:8080/getProfile`)
+            .then(function(items) {
+                items.json()
+                .then((jsonResponse) => {
+                    let Name = document.getElementById('Name')
+                    let Age = document.getElementById('Age')
+                    let Email = document.getElementById('Email')
+                    let Address = document.getElementById('Address')
+                    let profileToVisit = document.getElementById("getProfileValue").value
+                    let PName = document.getElementById("ProfileNamee")
+                    let pImg = document.getElementById("pImg")
+                    var found = new Boolean(false)
+                    console.log(found)
+                    
+                    //console.log(profileToVisit);
+                    //console.log(jsonResponse)
+                    for(let i = 0;i < jsonResponse.length; ++i){
+                        //console.log(jsonResponse[i].profileName)
+                        if(jsonResponse[i].profileName == profileToVisit){
+                            console.log("works")
+                            Name.innerHTML="Name: " + `${jsonResponse[i].profileName}`
+                            Age.innerHTML="Age: " + `${jsonResponse[i].age}`
+                            Email.innerHTML="Email: " + `${jsonResponse[i].email}`
+                            Address.innerHTML="Address: " + `${jsonResponse[i].address}`
+                            PName.innerHTML = "The profile you are visiting is " + `${jsonResponse[i].profileName}`
+                            pImg.src = jsonResponse[i].picture
+                            found = true
+                        }
+                    }
+                    console.log(found)
+                    if(found == false){
+                        PName.innerHTML = "The profile " + `${profileToVisit}` + " you are trying to visiting does not exist"
+                    }
+            })
+        }).catch((e) => { console.log(e) }).catch((e) => { console.log(e) })
+      }
+
+</script>

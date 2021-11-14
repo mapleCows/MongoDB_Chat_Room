@@ -1,0 +1,61 @@
+<h1> Home </h1>
+<p>This is the penis {{ title }} page</p>
+{{#if isAvailable}}
+<ul id = "rooms">
+    {{#each rooms}}
+        <li> <a href={{this.name}}> {{this.name}}  </a></li>
+    {{/each}}
+</ul>
+{{/if}}
+
+<form action="/create" method="POST">
+    <input type="text" name ="roomName" placeholder="enter room name"/>
+    <input type="submit" value="create room">
+</form>
+
+
+
+
+{{!-- {{commented expressions}} --}}
+<a href="createProfile" class="btn btn-info" role="button">Create a Profile</a>
+<a href="Profile" class="btn btn-info" role="button">View A Profile</a>
+{{!-- {{commented expressions}} --}}
+
+<script>
+    roomSet = new Set()
+    interval = window.setInterval(function() {
+        fetch(`http://localhost:8080/getRoom`)
+            .then(function(items) {
+                items.json()
+                .then((jsonResponse) => {
+                
+                let roomList = document.getElementById('rooms')
+                let roomListC = roomList.children
+                console.log(jsonResponse)
+                
+                
+                for (let i = 0; i < jsonResponse.length; ++i) {
+                    if (!(jsonResponse[i].name in roomSet)){
+                        roomSet.add(jsonResponse[i].name)                    
+                    }
+                }
+                console.log(roomSet)
+                roomList.innerHTML = ""
+                for (let i = 0; i < jsonResponse.length; ++i) {
+                    if (!(jsonResponse[i].name in roomSet)) {
+                        let list_item = document.createElement('li');
+                        let aElement = document.createElement('a')
+                        aElement.innerHTML = `${jsonResponse[i].name}`
+                        aElement.href = `${jsonResponse[i].name}`
+                        list_item.appendChild(aElement)
+                        roomList.appendChild(list_item)
+                    }
+                }
+
+            })
+        }).catch((e) => { console.log(e) }).catch((e) => { console.log(e) })
+    }, 3500);
+</script>
+
+
+

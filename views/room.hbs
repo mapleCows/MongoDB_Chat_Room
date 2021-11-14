@@ -1,0 +1,163 @@
+<h1> Room </h1>
+<h2 id = "roomNName">{{roomName}}</h2>
+<p>The room you are visiting is {{ roomName }}</p>
+
+
+{{!-- {{commented expressions}} --}}
+<div>
+    <input type="text" placeholder="Search Message " id="search">
+        <button type="button" onclick="searchMessages();">Search</button>
+    </input>
+</div>
+
+<div>
+    <P>Matching Messages</P>
+    <ul id = "searchMessages">
+    </ul>
+    <p>End of Matching Messages</p>
+</div>
+
+{{!-- {{commented expressions}} --}}
+
+
+{{#if isAvailable}}
+
+
+{{!-- {{commented expressions}} --}}
+<h2>:: Chat Messages ::</h2>
+{{!-- {{commented expressions}} --}}
+
+
+<ul id = "messages">
+</ul>
+{{/if}}
+
+
+<form action="/createMessage" method="POST" id = "mForm">
+    <input type = "text" name = "userName" placeholder="Type A userName..."/>
+    <input type = "text" name = "message" placeholder="Type A Message..."/>
+    <input type="hidden" name="roomName" value = {{ roomName }} />
+    <input type = "submit" value = "Send Message"/>
+</form>
+
+
+<script>
+    
+    //////////////////////////////////
+    function searchMessages(){
+        var found = new Boolean(false)
+        fetch(`http://localhost:8080/getMessages`)
+            .then(function(items) {
+                items.json()
+                .then((jsonResponse) => {
+                let roomList = document.getElementById('searchMessages')
+                let roomListC = roomList.children
+                let roomNName = document.getElementById('roomNName').textContent
+                let messagesToSearch = document.getElementById("search").value
+                
+                //console.log(jsonResponse)
+                //console.log(roomNName)
+                roomSet.clear
+                
+                for (let i = 0; i < jsonResponse.length; ++i) {
+                    if(jsonResponse[i].roomName == roomNName){
+                         if (!(jsonResponse[i] in roomSet)){
+                        roomSet.add(jsonResponse[i])
+                        roomIndex.push(i)                
+                        }
+                    }
+                }
+                //console.log(roomSet)
+                roomList.innerHTML = ""
+                
+
+
+                for (let i = 0; i < roomIndex.length; ++i) {
+                    if (!(jsonResponse[i].message in roomSet)) {
+                        console.log("IN if")
+                        //console.log(messagesToSearch)
+                        
+                        //console.log(jsonResponse[i].message)
+
+                        if(jsonResponse[roomIndex[i]].message == messagesToSearch ){
+                            let list_item = document.createElement('ul');
+                            let aElement = document.createElement('a')
+                            
+                            aElement.innerHTML = `${jsonResponse[roomIndex[i]].dateOfEntry}`+ "    "+`${jsonResponse[roomIndex[i]].username}`+":      " + `${jsonResponse[roomIndex[i]].message}` 
+                            list_item.appendChild(aElement)
+                            console.log(aElement)
+                            
+                            roomList.appendChild(list_item)
+                            //console.log(roomList)
+                            found = true
+                        }
+                        
+                    }
+                }
+                console.log(found)
+                if(found == false){
+                    let list_item = document.createElement('ul');
+                    let aElement = document.createElement('a')        
+                    aElement.innerHTML = "No Messages Matching : " + `${messagesToSearch}`
+                    list_item.appendChild(aElement)        
+                    roomList.appendChild(list_item)
+                }
+
+
+
+                roomSet.clear()
+                roomIndex = []
+            })
+        }).catch((e) => { console.log(e) }).catch((e) => { console.log(e) })
+    }
+    ////////////////////////////////////////        
+
+
+roomSet = new Set()
+roomIndex = []
+    interval = window.setInterval(function() {
+        
+        fetch(`http://localhost:8080/getMessages`)
+            .then(function(items) {
+                items.json()
+                .then((jsonResponse) => {
+                let roomList = document.getElementById('messages')
+                let roomListC = roomList.children
+                let roomNName = document.getElementById('roomNName').textContent
+                //console.log(jsonResponse)
+                //console.log(roomNName)
+                roomSet.clear
+                
+                for (let i = 0; i < jsonResponse.length; ++i) {
+                    if(jsonResponse[i].roomName == roomNName){
+                         if (!(jsonResponse[i] in roomSet)){
+                        roomSet.add(jsonResponse[i])
+                        roomIndex.push(i)                
+                        }
+                    }
+                }
+                //console.log(roomSet)
+                roomList.innerHTML = ""
+                //console.log(roomIndex)
+
+
+                for (let i = 0; i < roomIndex.length; ++i) {
+                    if (!(jsonResponse[i].message in roomSet)) {
+                        let list_item = document.createElement('ul');
+                        let aElement = document.createElement('a')
+                        aElement.innerHTML = `${jsonResponse[roomIndex[i]].dateOfEntry}`+ "    "+`${jsonResponse[roomIndex[i]].username}`+":      " + `${jsonResponse[roomIndex[i]].message}` 
+                        list_item.appendChild(aElement)
+                        roomList.appendChild(list_item)
+                        //console.log(roomIndex[i])
+                    }
+                }
+                roomSet.clear()
+                roomIndex = []
+            })
+        }).catch((e) => { console.log(e) }).catch((e) => { console.log(e) })
+    }, 1000);
+
+</script>
+    
+
+
